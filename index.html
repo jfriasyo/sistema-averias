@@ -355,7 +355,7 @@
     </div>
     <div class="req-grid">
       <div class="req rv"><div class="k">Sistema operativo</div><div class="v">Windows 10 / 11<small>64 bits</small></div></div>
-      <div class="req rv"><div class="k">Java</div><div class="v">JRE / JDK 21<small>obligatorio para ejecutar</small></div></div>
+      <div class="req rv"><div class="k">Java</div><div class="v">Runtime 21<small>solo si el sistema lo solicita</small></div></div>
       <div class="req rv"><div class="k">Base de datos</div><div class="v">SQLite<small>incluida, sin instalación</small></div></div>
       <div class="req rv"><div class="k">Memoria</div><div class="v">2 GB RAM<small>recomendado 4 GB</small></div></div>
     </div>
@@ -375,34 +375,32 @@
       <div class="step rv">
         <div class="step-num" aria-hidden="true"></div>
         <div>
-          <h3>Confirma que tienes Java 21</h3>
-          <p>Abre la consola (CMD o PowerShell) y ejecuta el comando. Si ves la versión 21, ya estás listo. Si no, descarga el JDK 21 desde Adoptium / Temurin e instálalo.</p>
-          <div class="code"><span class="cmt"># Verificar la versión instalada</span><br>java <span class="kw">-version</span><button class="copy" data-copy="java -version" aria-label="Copiar comando"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div>
+          <h3>Descarga el instalador</h3>
+          <p>Pulsa el botón de descarga de esta página. Obtendrás un único archivo: <span class="mono" style="color:#9FC2FF">Setup_SistemaAverias_v1.0.exe</span>. No necesitas descomprimir nada.</p>
         </div>
       </div>
 
       <div class="step rv">
         <div class="step-num" aria-hidden="true"></div>
         <div>
-          <h3>Descarga el paquete beta</h3>
-          <p>Baja el archivo desde el botón de descarga de esta página. Recibirás un <span class="mono" style="color:#9FC2FF">.zip</span> que contiene el ejecutable del sistema y su carpeta de base de datos.</p>
+          <h3>Ejecuta el instalador</h3>
+          <p>Haz doble clic en el <span class="mono" style="color:#9FC2FF">.exe</span>. Si Windows muestra el aviso azul de SmartScreen, haz clic en <b>Más información</b> y luego en <b>Ejecutar de todos modos</b>. Es normal en programas nuevos sin firma comercial.</p>
         </div>
       </div>
 
       <div class="step rv">
         <div class="step-num" aria-hidden="true"></div>
         <div>
-          <h3>Descomprime en una carpeta fija</h3>
-          <p>Extrae el contenido en una ubicación estable, por ejemplo <span class="mono" style="color:#9FC2FF">C:\SistemaAverias</span>. Evita ejecutarlo desde dentro del .zip: la base de datos necesita escribir en disco.</p>
+          <h3>Sigue el asistente</h3>
+          <p>En <b>Tareas adicionales</b> deja marcado <b>Crear acceso directo en el escritorio</b> y pulsa <b>Siguiente</b>. Luego, en <b>Listo para instalar</b>, pulsa <b>Instalar</b> y espera a que termine.</p>
         </div>
       </div>
 
       <div class="step rv">
         <div class="step-num" aria-hidden="true"></div>
         <div>
-          <h3>Ejecuta la aplicación</h3>
-          <p>Haz doble clic en el archivo <span class="mono" style="color:#9FC2FF">.jar</span>. Si no abre, ejecútalo desde la consola dentro de la carpeta para ver cualquier mensaje. Aparecerá la pantalla de carga y luego el login.</p>
-          <div class="code"><span class="cmt"># Desde la carpeta del sistema</span><br>java <span class="kw">-jar</span> SistemaAverias.jar<button class="copy" data-copy="java -jar SistemaAverias.jar" aria-label="Copiar comando"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div>
+          <h3>Abre el sistema</h3>
+          <p>Al finalizar, abre la aplicación desde el <b>acceso directo del escritorio</b>. Aparecerá la pantalla de carga y, después, el inicio de sesión.</p>
         </div>
       </div>
 
@@ -438,11 +436,11 @@
       <span class="sec-tag" style="display:inline-block;margin-bottom:12px">// versión beta</span>
       <h2>Descarga el Sistema de Averías</h2>
       <p>Esta es una versión beta en evaluación. Pruébala, registra averías reales y reporta cualquier detalle que encuentres para la versión final.</p>
-      <a class="btn btn-primary" id="dl-btn" href="https://github.com/jfriasyo/sistema-averias/releases/download/v1.0-beta/SistemaAverias.zip" rel="noopener" style="font-size:16px;padding:16px 30px">
+      <a class="btn btn-primary" id="dl-btn" href="https://github.com/jfriasyo/sistema-averias/releases/download/v1.0-beta/Setup_SistemaAverias_v1.0.exe" rel="noopener" style="font-size:16px;padding:16px 30px">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
-        Descargar SistemaAverias.zip
+        Descargar instalador (.exe)
       </a>
-      <div class="dl-meta">Archivo .zip · Java 21 requerido · Windows 64 bits</div>
+      <div class="dl-meta">Setup_SistemaAverias_v1.0.exe · Windows 64 bits</div>
     </div>
   </div>
 </section>
