@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Averías · Descarga Beta — Municipalidad Provincial de Piura</title>
+<meta name="description" content="Aplicación de escritorio para el registro y control de averías de equipos tecnológicos. Descarga la versión beta y sigue la guía de instalación.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1220;
+    --surface:#111B2E;
+    --surface-2:#16233B;
+    --line:#243651;
+    --line-soft:#1B2A42;
+    --text:#E9EFF8;
+    --muted:#90A2BE;
+    --muted-dim:#637493;
+    --brand:#3B82F6;
+    --brand-deep:#2563EB;
+    /* lenguaje de estados del propio sistema */
+    --st-pend:#F5A524;
+    --st-proc:#4C9DFF;
+    --st-esp:#A879F0;
+    --st-res:#34C97E;
+    --st-baja:#7488A4;
+    --radius:14px;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 520px at 78% -8%, rgba(59,130,246,.16), transparent 60%),
+      radial-gradient(700px 480px at 8% 10%, rgba(168,121,240,.08), transparent 55%),
+      var(--ink);
+    color:var(--text);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .mono{font-family:"IBM Plex Mono",monospace}
+
+  /* ---------- NAV ---------- */
+  header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(11,18,32,.72);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:600}
+  .brand .mark{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;
+    background:linear-gradient(150deg,var(--brand),var(--brand-deep));
+    box-shadow:0 6px 18px rgba(59,130,246,.35);flex:0 0 auto}
+  .brand .mark svg{width:17px;height:17px;display:block}
+  .brand small{display:block;font-weight:400;color:var(--muted);font-size:11px;letter-spacing:.04em}
+  .nav-links{display:flex;gap:28px;align-items:center;font-size:14px;color:var(--muted)}
+  .nav-links a{transition:color .15s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{padding:9px 16px;border-radius:9px;background:var(--brand);color:#fff;font-weight:600;
+    font-size:14px;transition:transform .15s,background .15s}
+  .nav-cta:hover{background:var(--brand-deep);transform:translateY(-1px)}
+  @media(max-width:780px){.nav-links{display:none}}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:72px 0 80px}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:22px}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--st-res);
+    box-shadow:0 0 0 4px rgba(52,201,126,.18)}
+  h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:clamp(2.5rem,5.4vw,4.05rem);
+    line-height:1.02;letter-spacing:-.025em;margin:0 0 20px}
+  h1 .accent{color:transparent;background:linear-gradient(120deg,#7CB2FF,var(--brand));
+    -webkit-background-clip:text;background-clip:text}
+  .lede{font-size:1.12rem;color:var(--muted);max-width:34ch;margin:0 0 32px}
+  .badge-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px}
+  .badge{font-size:12px;font-weight:500;color:var(--muted);padding:6px 12px;border-radius:99px;
+    border:1px solid var(--line);background:var(--surface)}
+  .badge.beta{color:#FFD9A0;border-color:rgba(245,165,36,.4);background:rgba(245,165,36,.08)}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:10px;font-family:"IBM Plex Sans";font-weight:600;
+    font-size:15px;padding:14px 24px;border-radius:11px;cursor:pointer;border:1px solid transparent;
+    transition:transform .15s,box-shadow .15s,background .15s,border-color .15s}
+  .btn-primary{background:linear-gradient(150deg,var(--brand),var(--brand-deep));color:#fff;
+    box-shadow:0 12px 30px -8px rgba(59,130,246,.55)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 40px -10px rgba(59,130,246,.7)}
+  .btn-ghost{background:transparent;color:var(--text);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--brand);color:#BFD6FF}
+  .btn svg{width:18px;height:18px}
+
+  /* ---------- APP WINDOW MOCKUP ---------- */
+  .window{border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    box-shadow:0 40px 80px -30px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.02) inset}
+  .titlebar{display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid var(--line-soft);
+    background:rgba(255,255,255,.015)}
+  .tdot{width:11px;height:11px;border-radius:50%}
+  .tdot.r{background:#ED6A5E}.tdot.y{background:#F5BE4F}.tdot.g{background:#61C354}
+  .tbar-title{margin-left:8px;font-size:12px;color:var(--muted)}
+  .tbar-title .mono{color:var(--text)}
+  .win-body{padding:18px}
+  .win-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .win-head h4{margin:0;font-family:"Space Grotesk";font-size:15px;font-weight:600}
+  .win-head span{font-size:11px;color:var(--muted)}
+  .stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+  .stat{padding:11px 9px 10px;border-radius:10px;background:var(--ink);border:1px solid var(--line-soft);
+    border-top:2px solid var(--c)}
+  .stat .n{font-family:"Space Grotesk";font-size:1.45rem;font-weight:700;line-height:1;color:var(--c)}
+  .stat .l{font-size:9.5px;color:var(--muted);margin-top:5px;letter-spacing:.01em;line-height:1.25}
+  .mini-table{font-size:11.5px;border:1px solid var(--line-soft);border-radius:10px;overflow:hidden}
+  .mrow{display:grid;grid-template-columns:84px 1fr auto;gap:10px;align-items:center;
+    padding:9px 12px;border-bottom:1px solid var(--line-soft)}
+  .mrow:last-child{border-bottom:none}
+  .mrow .code{color:#9FC2FF}
+  .mrow .desc{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pill{font-size:9.5px;font-weight:600;padding:3px 9px;border-radius:99px;white-space:nowrap}
+  .pill.p{color:var(--st-pend);background:rgba(245,165,36,.14)}
+  .pill.c{color:var(--st-proc);background:rgba(76,157,255,.16)}
+  .pill.e{color:var(--st-esp);background:rgba(168,121,240,.16)}
+  .pill.r{color:var(--st-res);background:rgba(52,201,126,.16)}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:74px 0}
+  .sec-head{margin-bottom:44px;max-width:60ch}
+  .sec-tag{font-family:"IBM Plex Mono";font-size:12px;color:var(--brand);letter-spacing:.06em;
+    margin-bottom:14px;display:block}
+  h2{font-family:"Space Grotesk";font-weight:700;font-size:clamp(1.7rem,3.2vw,2.4rem);
+    letter-spacing:-.02em;margin:0 0 14px;line-height:1.1}
+  .sec-head p{color:var(--muted);font-size:1.05rem;margin:0}
+
+  /* features */
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .feat{padding:24px;border-radius:var(--radius);border:1px solid var(--line-soft);
+    background:linear-gradient(180deg,var(--surface),rgba(17,27,46,.5));transition:border-color .2s,transform .2s}
+  .feat:hover{border-color:var(--line);transform:translateY(-3px)}
+  .feat .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;margin-bottom:16px;
+    background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.22)}
+  .feat .ic svg{width:20px;height:20px;stroke:#7CB2FF}
+  .feat h3{font-family:"Space Grotesk";font-size:1.05rem;font-weight:600;margin:0 0 7px}
+  .feat p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.55}
+
+  /* requisitos */
+  .req-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .req{padding:22px;border-radius:var(--radius);border:1px solid var(--line-soft);background:var(--surface)}
+  .req .k{font-family:"IBM Plex Mono";font-size:11px;color:var(--muted);text-transform:uppercase;
+    letter-spacing:.05em;margin-bottom:9px}
+  .req .v{font-family:"Space Grotesk";font-size:1.15rem;font-weight:600}
+  .req .v small{display:block;font-family:"IBM Plex Sans";font-size:.8rem;font-weight:400;color:var(--muted);margin-top:3px}
+
+  /* tutorial / steps */
+  .steps{display:grid;gap:18px;counter-reset:step}
+  .step{display:grid;grid-template-columns:54px 1fr;gap:22px;align-items:start;
+    padding:24px;border-radius:var(--radius);border:1px solid var(--line-soft);
+    background:linear-gradient(180deg,var(--surface),rgba(17,27,46,.4))}
+  .step-num{counter-increment:step;width:54px;height:54px;border-radius:12px;display:grid;place-items:center;
+    font-family:"Space Grotesk";font-weight:700;font-size:1.4rem;color:#fff;
+    background:linear-gradient(150deg,var(--brand),var(--brand-deep));
+    box-shadow:0 8px 20px -6px rgba(59,130,246,.6)}
+  .step-num::before{content:counter(step,decimal-leading-zero)}
+  .step h3{font-family:"Space Grotesk";font-size:1.18rem;font-weight:600;margin:4px 0 8px}
+  .step p{margin:0 0 14px;color:var(--muted);font-size:.96rem}
+  .step p:last-child{margin-bottom:0}
+
+  /* code block */
+  .code{position:relative;background:var(--ink);border:1px solid var(--line);border-radius:10px;
+    padding:14px 46px 14px 16px;font-family:"IBM Plex Mono";font-size:13px;color:#CFE0FB;overflow-x:auto}
+  .code .cmt{color:var(--muted)}
+  .code .kw{color:#7CB2FF}
+  .copy{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:7px;border:1px solid var(--line);
+    background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:.15s}
+  .copy:hover{color:var(--text);border-color:var(--brand)}
+  .copy svg{width:14px;height:14px}
+  .copy.ok{color:var(--st-res);border-color:var(--st-res)}
+
+  .cred{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+  .cred .chip{font-family:"IBM Plex Mono";font-size:12.5px;background:var(--ink);border:1px solid var(--line);
+    padding:5px 11px;border-radius:7px}
+  .cred .chip b{color:#9FC2FF;font-weight:600}
+
+  /* download band */
+  .download-band{margin:0 0 0;padding:0}
+  .dl-card{position:relative;overflow:hidden;border-radius:22px;border:1px solid var(--line);
+    background:
+      radial-gradient(600px 300px at 80% 0%, rgba(59,130,246,.22), transparent 60%),
+      linear-gradient(180deg,var(--surface-2),var(--surface));
+    padding:54px 48px;text-align:center}
+  .dl-card h2{margin-bottom:12px}
+  .dl-card p{color:var(--muted);max-width:48ch;margin:0 auto 30px}
+  .dl-meta{margin-top:20px;font-family:"IBM Plex Mono";font-size:12.5px;color:var(--muted)}
+  .dl-note{margin-top:8px;font-size:12px;color:var(--st-pend)}
+  .dl-grid-bg{position:absolute;inset:0;opacity:.5;pointer-events:none;
+    background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
+    background-size:46px 46px;mask-image:radial-gradient(70% 70% at 50% 0%,#000,transparent)}
+
+  /* footer */
+  footer{border-top:1px solid var(--line-soft);padding:42px 0 56px;margin-top:30px;color:var(--muted);font-size:13.5px}
+  .foot-in{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+  .foot-in .stack{font-family:"IBM Plex Mono";font-size:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .foot-in .stack span{padding:4px 10px;border:1px solid var(--line-soft);border-radius:6px}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .rv.in{opacity:1;transform:none}
+
+  @media(max-width:880px){
+    .hero-grid{grid-template-columns:1fr;gap:44px}
+    .lede{max-width:none}
+    .feat-grid{grid-template-columns:1fr 1fr}
+    .req-grid{grid-template-columns:1fr 1fr}
+    .stat-row{grid-template-columns:repeat(5,1fr)}
+  }
+  @media(max-width:560px){
+    .feat-grid,.req-grid{grid-template-columns:1fr}
+    .step{grid-template-columns:1fr;gap:14px}
+    .stat-row{grid-template-columns:repeat(5,1fr);gap:5px}
+    .stat .n{font-size:1.1rem}.stat .l{font-size:8px}
+    .dl-card{padding:40px 22px}
+    .hero{padding:48px 0 56px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto!important}
+    .rv{opacity:1;transform:none;transition:none}
+    .btn:hover,.nav-cta:hover,.feat:hover{transform:none}
+  }
+  :focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.8 2.8-2.1-2.1z"/></svg>
+      </span>
+      <span>Sistema de Averías<small>Soporte Técnico · MPP</small></span>
+    </div>
+    <nav class="nav-links">
+      <a href="#funciones">Funciones</a>
+      <a href="#requisitos">Requisitos</a>
+      <a href="#instalacion">Instalación</a>
+      <a href="#descargar">Descargar</a>
+    </nav>
+    <a class="nav-cta" href="#descargar">Descargar beta</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="rv in">
+      <span class="eyebrow"><span class="dot"></span>Municipalidad Provincial de Piura · Oficina de Soporte Técnico</span>
+      <h1>Controla cada <span class="accent">avería</span> sin perder el rastro.</h1>
+      <p class="lede">Aplicación de escritorio para registrar, asignar y dar seguimiento a las averías de los equipos tecnológicos de tu institución. Todo en un solo lugar.</p>
+      <div class="badge-row">
+        <span class="badge beta">● Versión beta v1.0</span>
+        <span class="badge">Java 21</span>
+        <span class="badge">SQLite incluido</span>
+        <span class="badge">Sin servidor</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#descargar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+          Descargar versión beta
+        </a>
+        <a class="btn btn-ghost" href="#instalacion">Ver guía de instalación</a>
+      </div>
+    </div>
+
+    <!-- mockup -->
+    <div class="rv in" style="transition-delay:.1s">
+      <div class="window" role="img" aria-label="Vista previa del panel del Sistema de Averías mostrando contadores por estado y últimas averías registradas">
+        <div class="titlebar">
+          <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+          <span class="tbar-title">Sistema de Averías — <span class="mono">Panel principal</span></span>
+        </div>
+        <div class="win-body">
+          <div class="win-head">
+            <h4>Resumen del día</h4>
+            <span>admin · sesión activa</span>
+          </div>
+          <div class="stat-row">
+            <div class="stat" style="--c:var(--st-pend)"><div class="n">7</div><div class="l">Pendientes</div></div>
+            <div class="stat" style="--c:var(--st-proc)"><div class="n">4</div><div class="l">En proceso</div></div>
+            <div class="stat" style="--c:var(--st-esp)"><div class="n">2</div><div class="l">Espera repuesto</div></div>
+            <div class="stat" style="--c:var(--st-res)"><div class="n">18</div><div class="l">Resueltos</div></div>
+            <div class="stat" style="--c:var(--st-baja)"><div class="n">3</div><div class="l">Dado de baja</div></div>
+          </div>
+          <div class="mini-table">
+            <div class="mrow"><span class="code mono">AVR-0042</span><span class="desc">PC Mesa de Partes no enciende</span><span class="pill p">Pendiente</span></div>
+            <div class="mrow"><span class="code mono">AVR-0041</span><span class="desc">Impresora Tesorería sin tóner</span><span class="pill c">En proceso</span></div>
+            <div class="mrow"><span class="code mono">AVR-0040</span><span class="desc">Switch piso 2 intermitente</span><span class="pill e">Espera repuesto</span></div>
+            <div class="mrow"><span class="code mono">AVR-0039</span><span class="desc">Monitor RR.HH. con líneas</span><span class="pill r">Resuelto</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNCIONES -->
+<section id="funciones">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-tag">// lo que hace</span>
+      <h2>Una herramienta, todo el flujo de soporte</h2>
+      <p>Desde que se reporta una falla hasta que se resuelve y queda registrada en la auditoría.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat rv">
+        <div class="ic"><svg fill="none" stroke-width="1.9" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4M4 5h16v14H4z"/></svg></div>
+        <h3>Registro de averías</h3>
+        <p>Cada falla recibe un código <span class="mono" style="color:#9FC2FF">AVR-XXXX</span> automático y avanza por cinco estados claros.</p>
+      </div>
+      <div class="feat rv">
+        <div class="ic"><svg fill="none" stroke-width="1.9" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11a4 4 0 1 0-8 0M4 20a8 8 0 0 1 16 0"/></svg></div>
+        <h3>Técnicos y asignación</h3>
+        <p>Asigna la avería a un técnico y abre WhatsApp con el mensaje listo para notificarle al instante.</p>
+      </div>
+      <div class="feat rv">
+        <div class="ic"><svg fill="none" stroke-width="1.9" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+        <h3>Inventario de equipos</h3>
+        <p>Registra cada equipo con código único y vincúlalo a una de las 10 unidades orgánicas de la institución.</p>
+      </div>
+      <div class="feat rv">
+        <div class="ic"><svg fill="none" stroke-width="1.9" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5M7 3h8l5 5v13H7z"/><path d="M9 13h6M9 17h4"/></svg></div>
+        <h3>Reportes PDF y Excel</h3>
+        <p>Genera informes filtrados por estado, técnico o equipo, con los datos de tu institución en el encabezado.</p>
+      </div>
+      <div class="feat rv">
+        <div class="ic"><svg fill="none" stroke-width="1.9" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Historial y auditoría</h3>
+        <p>Cada inicio de sesión, cambio de estado o reporte queda registrado. Filtra por módulo, acción o usuario.</p>
+      </div>
+      <div class="feat rv">
+        <div class="ic"><svg fill="none" stroke-width="1.9" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 4v5h-5"/></svg></div>
+        <h3>Respaldos y red</h3>
+        <p>Crea y restaura copias de la base con fecha automática. La base SQLite se comparte entre dos PC por red.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REQUISITOS -->
+<section id="requisitos">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-tag">// antes de empezar</span>
+      <h2>Requisitos del sistema</h2>
+      <p>Pensado para correr en los equipos de oficina sin instalar servidores ni configuraciones complejas.</p>
+    </div>
+    <div class="req-grid">
+      <div class="req rv"><div class="k">Sistema operativo</div><div class="v">Windows 10 / 11<small>64 bits</small></div></div>
+      <div class="req rv"><div class="k">Java</div><div class="v">JRE / JDK 21<small>obligatorio para ejecutar</small></div></div>
+      <div class="req rv"><div class="k">Base de datos</div><div class="v">SQLite<small>incluida, sin instalación</small></div></div>
+      <div class="req rv"><div class="k">Memoria</div><div class="v">2 GB RAM<small>recomendado 4 GB</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALACIÓN -->
+<section id="instalacion">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="sec-tag">// paso a paso</span>
+      <h2>Cómo instalar y abrir el sistema</h2>
+      <p>Sigue estos pasos en orden. En total no toma más de cinco minutos.</p>
+    </div>
+    <div class="steps">
+
+      <div class="step rv">
+        <div class="step-num" aria-hidden="true"></div>
+        <div>
+          <h3>Confirma que tienes Java 21</h3>
+          <p>Abre la consola (CMD o PowerShell) y ejecuta el comando. Si ves la versión 21, ya estás listo. Si no, descarga el JDK 21 desde Adoptium / Temurin e instálalo.</p>
+          <div class="code"><span class="cmt"># Verificar la versión instalada</span><br>java <span class="kw">-version</span><button class="copy" data-copy="java -version" aria-label="Copiar comando"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div>
+        </div>
+      </div>
+
+      <div class="step rv">
+        <div class="step-num" aria-hidden="true"></div>
+        <div>
+          <h3>Descarga el paquete beta</h3>
+          <p>Baja el archivo desde el botón de descarga de esta página. Recibirás un <span class="mono" style="color:#9FC2FF">.zip</span> que contiene el ejecutable del sistema y su carpeta de base de datos.</p>
+        </div>
+      </div>
+
+      <div class="step rv">
+        <div class="step-num" aria-hidden="true"></div>
+        <div>
+          <h3>Descomprime en una carpeta fija</h3>
+          <p>Extrae el contenido en una ubicación estable, por ejemplo <span class="mono" style="color:#9FC2FF">C:\SistemaAverias</span>. Evita ejecutarlo desde dentro del .zip: la base de datos necesita escribir en disco.</p>
+        </div>
+      </div>
+
+      <div class="step rv">
+        <div class="step-num" aria-hidden="true"></div>
+        <div>
+          <h3>Ejecuta la aplicación</h3>
+          <p>Haz doble clic en el archivo <span class="mono" style="color:#9FC2FF">.jar</span>. Si no abre, ejecútalo desde la consola dentro de la carpeta para ver cualquier mensaje. Aparecerá la pantalla de carga y luego el login.</p>
+          <div class="code"><span class="cmt"># Desde la carpeta del sistema</span><br>java <span class="kw">-jar</span> SistemaAverias.jar<button class="copy" data-copy="java -jar SistemaAverias.jar" aria-label="Copiar comando"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div>
+        </div>
+      </div>
+
+      <div class="step rv">
+        <div class="step-num" aria-hidden="true"></div>
+        <div>
+          <h3>Inicia sesión por primera vez</h3>
+          <p>Usa las credenciales de administrador que vienen por defecto. Tendrás acceso completo a todos los módulos.</p>
+          <div class="cred">
+            <span class="chip">Usuario: <b>admin</b></span>
+            <span class="chip">Contraseña: <b>admin123</b></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step rv">
+        <div class="step-num" aria-hidden="true"></div>
+        <div>
+          <h3>Configura tu institución y cambia la clave</h3>
+          <p>Entra a <b>Configuración</b> para poner el nombre, RUC, área y el encabezado de los reportes. Luego cambia la contraseña de <span class="mono" style="color:#9FC2FF">admin</span> y crea los usuarios de tus técnicos: al marcar el rol Técnico, su perfil se crea automáticamente.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DESCARGAR -->
+<section id="descargar" class="download-band">
+  <div class="wrap">
+    <div class="dl-card rv">
+      <div class="dl-grid-bg" aria-hidden="true"></div>
+      <span class="sec-tag" style="display:inline-block;margin-bottom:12px">// versión beta</span>
+      <h2>Descarga el Sistema de Averías</h2>
+      <p>Esta es una versión beta en evaluación. Pruébala, registra averías reales y reporta cualquier detalle que encuentres para la versión final.</p>
+      <a class="btn btn-primary" id="dl-btn" href="https://github.com/jfriasyo/sistema-averias/releases/download/v1.0-beta/SistemaAverias.zip" rel="noopener" style="font-size:16px;padding:16px 30px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+        Descargar SistemaAverias.zip
+      </a>
+      <div class="dl-meta">Archivo .zip · Java 21 requerido · Windows 64 bits</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap foot-in">
+    <div>
+      <div style="font-weight:600;color:var(--text);margin-bottom:6px">Sistema de Averías · v1.0 beta</div>
+      Práctica Preprofesional — Municipalidad Provincial de Piura<br>
+      Grover Joseph Frías Yovera · Ingeniería de Sistemas, UCV
+    </div>
+    <div class="stack">
+      <span>NetBeans 21</span><span>Maven</span><span>Java 21</span><span>SQLite</span><span>FlatLaf</span><span>iText</span><span>Apache POI</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // copiar comandos
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click', function(){
+      var t = b.getAttribute('data-copy');
+      navigator.clipboard.writeText(t).then(function(){
+        b.classList.add('ok');
+        var old = b.innerHTML;
+        b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+        setTimeout(function(){ b.classList.remove('ok'); b.innerHTML = old; }, 1500);
+      });
+    });
+  });
+
+  // reveal al hacer scroll
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll('.rv:not(.in)').forEach(function(el){ io.observe(el); });
+</script>
+</body>
+</html>
